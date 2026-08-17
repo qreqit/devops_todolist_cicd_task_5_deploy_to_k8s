@@ -123,8 +123,8 @@ jobs:
   deploy-helm-dev:
     name: Deploy Helm to Development
     runs-on: ubuntu-latest
-    uses: .github/workflows/deployment-workflow.yml
-    needs: [helm-ci, docker-ci]
+    uses: .github/workflows/helm-upgrade.yml
+    needs: [ helm-ci, docker-ci ]
     secrets: inherit
     with:
       environment: development
