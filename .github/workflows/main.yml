@@ -61,7 +61,14 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: helm-artifacts
-          path: ${{ github.workspace }}/helm-charts
+          path: ${{ github.workspace }}/helm-charts\
+
+      - name: Upload config for kind cluster
+        if: github.ref_name == 'dev'
+        uses: actions/upload-artifact@v4
+        with:
+          name: cluster-config
+          path: ${{ github.workspace }}/cluster.yml
 
   docker-ci:
     name: Build and Push Image
