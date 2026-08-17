@@ -53,7 +53,7 @@ jobs:
             # 2. Гарантована наявність образу всередині кластера
       - name: Load image to Kind
         run: |
-          docker pull ${{ inputs.repository }}:${{ inputs.version }}
+          docker pull greqit/todoapp:${{ inputs.version }}
           kind load docker-image ${{ inputs.repository }}:${{ inputs.version }} --name kind  
 
       - name: Set up Helm
