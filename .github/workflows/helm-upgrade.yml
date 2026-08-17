@@ -41,6 +41,7 @@ jobs:
         uses: helm/kind-action@v1
         with:
           config: cluster.yml
+          cluster_name: 'kind'
 
       - name: Pull and Load Docker Image into Kind
         run: |
