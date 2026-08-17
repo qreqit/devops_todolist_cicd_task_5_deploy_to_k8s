@@ -31,6 +31,17 @@ jobs:
           name: helm-artifacts
           path: .
 
+      - name: Download cluster config artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: cluster-config
+          path: .
+
+      - name: Create k8s kind cluster
+        uses: helm/kind-action@v1
+        with:
+          config: cluster.yml
+
       - name: Set up Helm
         uses: azure/setup-helm@v4.2.0
 
