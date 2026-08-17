@@ -121,7 +121,7 @@ jobs:
 
   deploy-helm-dev:
     name: Deploy Helm to Development
-    uses: .github/workflows/helm-upgrade.yml
+    uses: .github/workflows/helm-upgrade.yml@dev
     needs: [ helm-ci, docker-ci ]
     secrets: inherit
     with:
