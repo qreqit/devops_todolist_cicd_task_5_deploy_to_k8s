@@ -1,7 +1,7 @@
 todoapp:
   namespace: todoapp
   image:
-    repository: greqit/todoapp
+    repository: ikulyk404/todoapp
 
   resources:
     requests:
