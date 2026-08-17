@@ -91,6 +91,7 @@ jobs:
 
   helm-ci:
     runs-on: ubuntu-latest
+    environment: development
     needs: python-ci
     if: github.ref_name == 'main'
     name: Helm CI
@@ -118,3 +119,14 @@ jobs:
       with:
         name: helm-package
         path: ./*.tgz
+
+  deploy-helm-dev:
+    name: Deploy Helm to Development
+    runs-on: ubuntu-latest
+    uses: .github/workflows/deployment-workflow.yml
+    needs: [helm-ci, docker-ci]
+    secrets: inherit
+    with:
+      environment: development
+      version: ${{ github.sha }}
+
