@@ -42,6 +42,11 @@ jobs:
         with:
           config: cluster.yml
 
+      - name: Pull and Load Docker Image into Kind
+        run: |
+          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/todoapp:${{ inputs.version }}
+          kind load docker-image ${{ secrets.DOCKERHUB_USERNAME }}/todoapp:${{ inputs.version }} --name kind    
+
       - name: Set up Helm
         uses: azure/setup-helm@v4.2.0
 
