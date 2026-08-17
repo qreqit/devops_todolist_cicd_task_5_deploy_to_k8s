@@ -4,9 +4,9 @@ run-name: ${{ github.actor }} - ${{ github.ref_name}} -${{ github.sha }}
 
 on:
   push:
-    branches: ["main"]
+    branches: ["dev"]
   pull_request:
-    branches: ["main"]
+    branches: ["dev"]
 
 env:
   PythonVersion: 3.8
@@ -57,14 +57,14 @@ jobs:
           path: .
 
       - name: Upload helm artifacts
-        if: github.ref_name == 'main'
+        if: github.ref_name == 'dev'
         uses: actions/upload-artifact@v4
         with:
           name: helm-artifacts
-          path: ${{ github.workspace }}/helm-charts
+          path: ${{ github.workspace }}/helm-charts\
 
       - name: Upload config for kind cluster
-        if: github.ref_name == 'main'
+        if: github.ref_name == 'dev'
         uses: actions/upload-artifact@v4
         with:
           name: cluster-config
@@ -73,7 +73,7 @@ jobs:
   docker-ci:
     name: Build and Push Image
     runs-on: ubuntu-latest
-    if: ${{ github.ref_name == 'main' }}
+    if: ${{ github.ref_name == 'dev' }}
     needs: python-ci
     steps:
 
@@ -98,9 +98,8 @@ jobs:
 
   helm-ci:
     runs-on: ubuntu-latest
-    environment: development
     needs: python-ci
-    if: github.ref_name == 'main'
+    if: github.ref_name == 'dev'
     name: Helm CI
     steps:
 
@@ -127,24 +126,12 @@ jobs:
         name: helm-package
         path: ./*.tgz
 
-  deploy-helm-development:
-    name: Deploy Helm to Development environment
-    needs: [ docker-ci, helm-ci ]
-    uses: ./.github/workflows/deployment-workflow.yml
+  deploy-helm-dev:
+    name: Deploy Helm
+    needs: [ helm-ci, docker-ci ]
+    uses: ./.github/workflows/helm-upgrade.yml
+    secrets: inherit
     with:
       environment: development
-      version: ${{ github.sha }}Expand commentComment on line R135ResolvedExpand commentComment on lines R133 to R135Resolved
-      repository: "${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DockerImageName }}"
-    secrets: inherit
+      version: ${{ github.sha }}
 
-  deploy-helm-staging:
-    name: Deploy Helm to Staging environment
-    needs: deploy-helm-development
-    uses: ./.github/workflows/deployment-workflow.yml
-    with:
-      environment: staging
-      version: ${{ github.sha }}Expand commentComment on line R145Resolved
-      repository: "${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DockerImageName }}"
-      helm-values-path: './todoapp/values/stg.yaml'
-      helm-release-name: todoapp-stagingExpand commentComment on lines R143 to R148Resolved
-    secrets: inherit
