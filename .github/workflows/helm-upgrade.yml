@@ -11,7 +11,7 @@ on:
       repository:
         required: false
         description: 'Name of the docker repository'
-        default: greqit/todoapp
+        default: zaavee/todoapp
         type: string
       version:
         required: true
